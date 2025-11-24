@@ -66,14 +66,18 @@ def filter_and_map_orthologs(file_path, output_path):
     return ortholog_dict
 
 
-# ========== MAIN EXECUTION SECTION ==========
+def main():
+    # ========== MAIN EXECUTION SECTION ==========
 
-# Replace with your actual file paths
-file_path = r"C:/Users/15611/Desktop/test_script/4_Apis ortholog gene finding/Input/Hymenoptera_HGD_Ortho.tab"
-output_path = r"C:/Users/15611/Desktop/test_script/4_Apis ortholog gene finding/Output/ortholog_mapping.csv"
+    # Replace with your actual file paths
+    file_path = r"C:/Users/15611/Desktop/test_script/4_Apis ortholog gene finding/Input/Hymenoptera_HGD_Ortho.tab"
+    output_path = r"C:/Users/15611/Desktop/test_script/4_Apis ortholog gene finding/Output/ortholog_mapping.csv"
 
-# Run the mapping function
-ortholog_mapping = filter_and_map_orthologs(file_path, output_path)
+    # Run the mapping function
+    ortholog_mapping = filter_and_map_orthologs(file_path, output_path)
 
-# Print result confirmation
-print(f"Mapping results have been written to: {output_path}")
+    # Print result confirmation
+    print(f"Mapping results have been written to: {output_path}")
+
+if __name__ == "__main__":
+    main()

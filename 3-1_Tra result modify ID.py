@@ -84,14 +84,17 @@ def process_csv(input_file, output_file):
         print(f"Error processing file: {e}")
 
 
-# === Example Usage ===
-input = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Input/max_match_per_gene.csv"
-output = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Output/max_match_per_gene_ID_modified.csv"
-process_csv(input, output)
 
-input = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Input/exon_counts_with_strand.csv"
-output = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Output/exon_counts_with_strand_ID_modified.csv"
-process_csv(input, output)
+def main():
+    # === Example Usage ===
+    input = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Input/max_match_per_gene.csv"
+    output = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Output/max_match_per_gene_ID_modified.csv"
+    process_csv(input, output)
+
+    input = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Input/exon_counts_with_strand.csv"
+    output = r"C:/Users/15611/Desktop/test_script/3-1_Tra result modify ID/Output/exon_counts_with_strand_ID_modified.csv"
+    process_csv(input, output)
 
 
-
+if __name__ == "__main__":
+    main()

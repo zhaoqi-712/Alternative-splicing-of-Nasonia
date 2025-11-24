@@ -50,21 +50,22 @@ TREATMENT_PATH = r"C:/Users/15611/Desktop/test_script/5_Create scoring matrix/In
 GENE_EXPRESSION_PATH = r"C:/Users/15611/Desktop/test_script/5_Create scoring matrix/Input/expression data_ID_transferred_genome annotation.xlsx"
 
 # Out put path
-OUTPUT_PATH = r"C:/Users/15611/Desktop/test_script/5_Create scoring matrix/Output/Scoring_matrix_without cell.csv"
+OUTPUT_PATH = r"C:/Users/15611/Desktop/test_script/5_Create scoring matrix/Output/Scoring_matrix_try.csv"
 
 # Time point keys to check for FDR analysis (columns in the input data)
+#  Time points '1_1h', '2_4h', '7_27h' not included.
 KEYS_TO_CHECK = ['3_8h', '4_12h', '5_17h', '6_22h']
 
 # Fields used for calculating the total score with their weights
 COUNTING_SCORE_FIELDS = [
     'number_FDR_<_0.01_(8-22h)',
     "number_FDR_punish",
-    'GOTERM_BP_regulation: regulation of transcription, regulation of gene expression, regulation of DNA-templated transcription',
-    'GOTERM_MF_DNA/RNA_binding: RNA binding, DNA-binding, DNA binding, mRNA binding',
-    'GOTERM_CC_nucleus: GO:0005634~nucleus',
-    'INTERPRO_ZnF: Znf_C2H2, DM_DNA-bd, DMRT',
-    'GOTERM_BP_punishment: protein phosphorylation, transmembrane transport',
-    'GOTERM_CC_punishment: cytoplasm, membrane, plasma membrane, cytosol, mitochondrion',
+    'GOTERM_BP',
+    'GOTERM_MF',
+    'GOTERM_CC',
+    'INTERPRO',
+    'GOTERM_BP_DIRECT_punishment',
+    'GOTERM_CC_DIRECT_punishment',
     'Target Sequence Score (female exons)',
     "Apis_ortholog_24-50h_FDR<0.05",
     "Apis_ortholog_55-70h_FDR<0.05"
@@ -73,8 +74,10 @@ COUNTING_SCORE_FIELDS = [
 # Configuration for Gene Ontology term processing
 # Each entry specifies:
 # - key: The field name in the input data to check
-# - keywords: List of terms to search for in that field, check whether it's a part of the term
-#   The keywords can be replaced to the terms of interest.
+# (the field where the GO terms of a gene is stored)
+# - keywords: List of terms to search for in that field,
+# check whether it's a part of the GO terms of certain gene
+########  The keywords can be replaced to the terms of interest.
 # - new_key: Name of the new field to create
 # - func: Type of operation ('inclusion' adds positive score, 'punish' adds negative)
 GO_CONFIGS = [
@@ -83,42 +86,42 @@ GO_CONFIGS = [
         'key': "GOTERM_BP_DIRECT",
         'keywords': ["regulation of transcription", "regulation of gene expression",
                      "regulation of DNA-templated transcription"],
-        'new_key': "GOTERM_BP_regulation",
+        'new_key': "GOTERM_BP",
         'func': 'inclusion'
     },
     # Positive scoring terms for Molecular Function
     {
         'key': "GOTERM_MF_DIRECT",
         'keywords': ["RNA binding", "DNA-binding", "DNA binding", "mRNA binding"],
-        'new_key': "GOTERM_MF_DNA/RNA_binding",
+        'new_key': "GOTERM_MF",
         'func': 'inclusion'
     },
     # Positive scoring terms for Cellular Component
     {
         'key': "GOTERM_CC_DIRECT",
         'keywords': ["GO:0005634~nucleus"],
-        'new_key': "GOTERM_CC_nucleus",
+        'new_key': "GOTERM_CC",
         'func': 'inclusion'
     },
     # Positive scoring terms for InterPro domains
     {
         'key': "INTERPRO",
         'keywords': ["Znf_C2H2", "DM_DNA-bd", "DMRT"],
-        'new_key': "INTERPRO_ZnF",
+        'new_key': "INTERPRO",
         'func': 'inclusion'
     },
     # Negative scoring terms for Biological Process
     {
         'key': "GOTERM_BP_DIRECT",
         'keywords': ["protein phosphorylation", "transmembrane transport"],
-        'new_key': "GOTERM_BP_punishment",
+        'new_key': "GOTERM_BP_DIRECT_punishment",
         'func': 'punish'
     },
     # Negative scoring terms for Cellular Component
     {
         'key': "GOTERM_CC_DIRECT",
         'keywords': ["cytoplasm", "membrane", "plasma membrane", "cytosol", "mitochondrion"],
-        'new_key': "GOTERM_CC_punishment",
+        'new_key': "GOTERM_CC_DIRECT_punishment",
         'func': 'punish'
     }
 ]
@@ -289,7 +292,7 @@ def add_key_based_on_inclusion(data, key_to_check, keywords_list, new_key_name):
         list: Updated list with new fields added
     """
     # Create descriptive field name listing all keywords
-    key_name = f"{new_key_name}: {', '.join(keywords_list)}"
+    key_name = new_key_name
 
     for dic in data:
         # Get value to check (empty string if field missing)
@@ -306,7 +309,7 @@ def add_key_based_punish(data, key_to_check, keywords_list, new_key_name):
 
     Args:
         data (list): List of gene data dictionaries
-        key_to_check (str): Field name to search in
+        key_to_check (str): Term name to search in
         keywords_list (list): Keywords to search for
         new_key_name (str): Name for new field to add
 
@@ -314,11 +317,13 @@ def add_key_based_punish(data, key_to_check, keywords_list, new_key_name):
         list: Updated list with new fields added
     """
     # Create descriptive field name listing all keywords
-    key_name = f"{new_key_name}: {', '.join(keywords_list)}"
+    key_name = new_key_name
 
     for dic in data:
         # Get value to check (empty string if field missing)
         target_value = dic.get(key_to_check, "")
+        print(target_value)
+
         # Set value to -100 if any keyword found, else 0
         dic[key_name] = -100 if any(keyword in target_value for keyword in keywords_list) else 0
     return data

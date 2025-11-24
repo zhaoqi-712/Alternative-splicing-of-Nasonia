@@ -126,27 +126,31 @@ def count_max_match_per_gene(exon_match_counts, output_csv):
             chrom, strand, max_count = max_match
             csvwriter.writerow([gene_id, chrom, strand, max_count])
 
+def main():
+    # ========== MAIN EXECUTION SECTION ==========
 
-# ========== MAIN EXECUTION SECTION ==========
+    # Input file paths
+    genome_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_genome.fna"
+    gff_file = r"E:/Research_Practice/data/Female_exon_annotation/merged_transcriptom_females_modified.gtf"
 
-# Input file paths
-genome_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_genome.fna"
-gff_file = r"E:/Research_Practice/data/Female_exon_annotation/merged_transcriptom_females_modified.gtf"
+    # List of target sequences to count
+    target_seqs = [
+        "CGAAGATA", "CCCTGAAGATTTGC", "GGAAGATA", "GGAAGATC",
+        "TGAAGATC", "CGAAGATA", "TGAAGATT"
+    ]
 
-# List of target sequences to count
-target_seqs = [
-    "CGAAGATA", "CCCTGAAGATTTGC", "GGAAGATA", "GGAAGATC",
-    "TGAAGATC", "CGAAGATA", "TGAAGATT"
-]
+    # Output file paths
+    output_csv_exons = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/exon_counts_with_strand_female.csv"
+    output_csv_max = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/max_match_per_gene_female.csv"
 
-# Output file paths
-output_csv_exons = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/exon_counts_with_strand_female.csv"
-output_csv_max = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/max_match_per_gene_female.csv"
+    # Run processing functions
+    exon_match_counts = count_sequence_in_exons(genome_file, gff_file, target_seqs, output_csv_exons)
+    count_max_match_per_gene(exon_match_counts, output_csv_max)
 
-# Run processing functions
-exon_match_counts = count_sequence_in_exons(genome_file, gff_file, target_seqs, output_csv_exons)
-count_max_match_per_gene(exon_match_counts, output_csv_max)
+    # Print completion messages
+    print(f"Results for exons written to {output_csv_exons}")
+    print(f"Max match counts per gene written to {output_csv_max}")
 
-# Print completion messages
-print(f"Results for exons written to {output_csv_exons}")
-print(f"Max match counts per gene written to {output_csv_max}")
+
+if __name__ == "__main__":
+    main()

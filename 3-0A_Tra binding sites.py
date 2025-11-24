@@ -130,25 +130,30 @@ def count_max_match_per_gene(exon_match_counts, output_csv):
             csvwriter.writerow([gene_id, chrom, strand, max_count])
 
 
-# ====== FILE PATHS AND TARGET SEQUENCES ======
-# Uses all exons as reference
-# Path to the genome fasta file
-genome_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_genome.fna"
-# Path to the genome annotation gff file
-gff_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_annotations.gff"
-# test fru
-#gff_file = r"C:\Users\15611\Desktop\Nv_annotations.gff"
-target_seqs = ["CGAAGATA", "CCCTGAAGATTTGC", "GGAAGATA", "GGAAGATC",
-               "TGAAGATC", "CGAAGATA", "TGAAGATT"]
-#target_seqs = ["GAAGAT"]
 
-output_csv_exons = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/try_exon_counts_with_strand.csv"
-output_csv_max = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/try_max_match_per_gene.csv"
+def main():
+    # ====== FILE PATHS AND TARGET SEQUENCES ======
+    # Uses all exons as reference
+    # Path to the genome fasta file
+    genome_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_genome.fna"
+    # Path to the genome annotation gff file
+    gff_file = r"C:/Users/15611/Desktop/test_script/Genome and annotations/Nv_annotations.gff"
+    # test fru
+    # gff_file = r"C:\Users\15611\Desktop\Nv_annotations.gff"
+    target_seqs = ["CGAAGATA", "CCCTGAAGATTTGC", "GGAAGATA", "GGAAGATC",
+                   "TGAAGATC", "CGAAGATA", "TGAAGATT"]
+    # target_seqs = ["GAAGAT"]
 
-# ====== RUN ANALYSIS ======
+    output_csv_exons = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/try_exon_counts_with_strand.csv"
+    output_csv_max = r"C:/Users/15611/Desktop/test_script/3_Tra binding sites/Output/try_max_match_per_gene.csv"
 
-exon_match_counts = count_sequence_in_exons(genome_file, gff_file, target_seqs, output_csv_exons)
-count_max_match_per_gene(exon_match_counts, output_csv_max)
+    # ====== RUN ANALYSIS ======
 
-print(f"Results for exons written to {output_csv_exons}")
-print(f"Max match counts per gene written to {output_csv_max}")
+    exon_match_counts = count_sequence_in_exons(genome_file, gff_file, target_seqs, output_csv_exons)
+    count_max_match_per_gene(exon_match_counts, output_csv_max)
+
+    print(f"Results for exons written to {output_csv_exons}")
+    print(f"Max match counts per gene written to {output_csv_max}")
+
+if __name__ == "__main__":
+    main()

@@ -264,8 +264,8 @@ def extract_sequence_from_genome(gene_id, gtf_list, output_dir):
     SeqIO.write(seq_record, output_dir, "fasta")
     print(f"Sequence for gene {gene_id} extracted and saved to {output_dir}")
 
-# Execution Code
-if __name__ == "__main__":
+
+def main():
     # Initialize dictionaries
     trans_ID_path = r"C:/Users/15611/Desktop/test_script/7_Process visualization documents/Input/Dictionary_transcript_entrez_mapping.csv"
     trans_ID_dict = csv_to_dict(trans_ID_path)
@@ -292,3 +292,7 @@ if __name__ == "__main__":
     TPM_csv_female = read_csv_to_dict(TPM_csv_path_female)
     for gene in target_gene_list:
         process_transcripts(processed_data, trans_ID_dict, gene, TPM_csv_female, output_path, "female")
+
+
+if __name__ == "__main__":
+    main()

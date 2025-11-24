@@ -12,7 +12,6 @@ import csv
 # Set your email address (required by NCBI Entrez)
 Entrez.email = "zhaoqi.leng@wur.nl"  # Replace with your email
 
-
 def get_gene_id_from_ncbi(gene_name, species_name="Apis mellifera"):
     """
     Query NCBI Gene database to retrieve a GeneID for a given gene name.

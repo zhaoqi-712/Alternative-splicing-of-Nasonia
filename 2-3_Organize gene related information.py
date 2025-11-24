@@ -123,29 +123,37 @@ def save_gene_info_to_csv(gene_info, output_file):
     print(f"Data successfully written to: {output_file}")
 
 
-# ========== MAIN EXECUTION SECTION ==========
 
-# Step 1: Load gene splicing data (the result of step 1, long format, no FDR filtering)
-input_gene_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Input/Nasonia_all_FDR.csv"
-gene_data = read_csv_to_list(input_gene_file)
 
-# Step 2: Convert to list of dictionaries
-gene_info = basic_info(gene_data)
 
-# Step 3: Load GO annotations
-input_GO_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Input/GO_terms_annotation.csv"
-GO_dic = get_GO_terms(input_GO_file)
+def main():
+    # ========== MAIN EXECUTION SECTION ==========
 
-# Step 4: Annotate each gene_info item with GO terms
-for entry in gene_info:
-    gene_id = entry['gene_id']
-    if gene_id in GO_dic:
-        for key, value in GO_dic[gene_id].items():
-            entry[key] = value
+    # Step 1: Load gene splicing data (the result of step 1, long format, no FDR filtering)
+    input_gene_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Input/Nasonia_all_FDR.csv"
+    gene_data = read_csv_to_list(input_gene_file)
 
-# Step 5: Replace empty values with None
-gene_info = delete_empty(gene_info)
+    # Step 2: Convert to list of dictionaries
+    gene_info = basic_info(gene_data)
 
-# Step 6: Save final annotated data to CSV
-output_gene_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Output/Gene_info_result_all.csv"
-save_gene_info_to_csv(gene_info, output_gene_file)
+    # Step 3: Load GO annotations
+    input_GO_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Input/GO_terms_annotation.csv"
+    GO_dic = get_GO_terms(input_GO_file)
+
+    # Step 4: Annotate each gene_info item with GO terms
+    for entry in gene_info:
+        gene_id = entry['gene_id']
+        if gene_id in GO_dic:
+            for key, value in GO_dic[gene_id].items():
+                entry[key] = value
+
+    # Step 5: Replace empty values with None
+    gene_info = delete_empty(gene_info)
+
+    # Step 6: Save final annotated data to CSV
+    output_gene_file = r"C:/Users/15611/Desktop/test_script/2-3_Organize gene related information/Output/Gene_info_result_all.csv"
+    save_gene_info_to_csv(gene_info, output_gene_file)
+
+
+if __name__ == "__main__":
+    main()
